@@ -30,15 +30,52 @@ One `Dockerfile`, three stages, all `FROM frankjoshua/ros2:lyrical`:
 1. Install Docker, VS Code, and the **Dev Containers** extension.
 2. Open this folder in VS Code.
 3. `Ctrl+Shift+P` → **Dev Containers: Reopen in Container**. The first build pulls the base image.
-4. In the container terminal, build and run the example:
+4. Open a terminal — ROS is already sourced, so `ros2` works immediately. Build and run the example:
    ```
    colcon build --symlink-install
-   source install/setup.bash
+   source install/setup.bash   # or just open a new terminal — the workspace overlay auto-sources
    ros2 run example_pkg example_node
    ```
 
 The repo root is the colcon workspace (`/home/ws` in the container), so `build/`, `install/`, and
-`log/` appear here and are git-ignored.
+`log/` appear here and are git-ignored. The container runs as the non-root **`ubuntu`** user, which
+is already in the `dialout`/`video`/`plugdev` groups — handy for serial devices and cameras.
+
+## Multiple nodes & local-network discovery
+
+Nodes can talk to each other — on this machine or across your LAN — out of the box. The dev
+container (`.devcontainer/devcontainer.json`) sets:
+
+- **`--net=host --ipc=host --pid=host`** (`runArgs`): host networking for LAN discovery; shared
+  memory for same-host transport (**`--ipc=host` is required** — without a shared `/dev/shm`, Fast
+  DDS instances silently fail to connect); and unique DDS GUIDs across containers.
+- **`ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET`** (`containerEnv`): discover nodes anywhere on the local
+  subnet, not just this host. Use `LOCALHOST` to restrict discovery to this machine.
+- **`ROS_DOMAIN_ID=0`** (`containerEnv`): only nodes sharing this ID discover each other. Give each
+  project/person a unique ID to stay isolated on a shared LAN.
+
+### Quick pub/sub test
+
+In two terminals — same container, two containers, or two machines on the LAN:
+
+```
+# A — publisher
+ros2 topic pub /chatter std_msgs/msg/String "{data: hello}"
+
+# B — subscriber
+ros2 topic echo /chatter
+```
+
+`ros2 topic list` and `ros2 node list` should show the other side. Launch another instance as its
+own container with the same flags:
+
+```
+docker run -it --net=host --ipc=host --pid=host frankjoshua/ros2-template
+```
+
+> **Multicast:** `SUBNET` discovery uses multicast — reliable on wired LANs, but some Wi-Fi/cloud
+> networks block it. If two machines can't discover each other there, run a Fast DDS Discovery
+> Server and point nodes at it with `ROS_DISCOVERY_SERVER=<host-ip>:11811`.
 
 ## Deploy (build & publish a multi-arch image)
 
