@@ -57,7 +57,7 @@ if [[ -z "${LOCAL}" ]]; then
   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
 fi
 # Build container on all achitectures in parallel and push to Docker Hub
-eval "docker buildx build $PUSH -t $TAG $ARCHITECTURE . $QUIET"
+eval "docker buildx build $PUSH -t $TAG $ARCHITECTURE --target prod . $QUIET"
 # Clean up and return error code for CI system if needed
 ERROR_CODE=$?
 if [[ -z "${LOCAL}" ]]; then
