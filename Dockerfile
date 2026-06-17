@@ -13,6 +13,10 @@ FROM base AS dev
 ARG USERNAME=ubuntu
 RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
+# VS Code terminals open an interactive shell that bypasses the image ENTRYPOINT, so source the ROS
+# environment (and the workspace overlay, once built) from .bashrc — otherwise `ros2` isn't on PATH.
+RUN echo 'source /opt/ros/$ROS_DISTRO/setup.bash' >> /home/$USERNAME/.bashrc \
+    && echo '[ -f /home/ws/install/setup.bash ] && source /home/ws/install/setup.bash' >> /home/$USERNAME/.bashrc
 ENV SHELL=/bin/bash
 USER $USERNAME
 CMD ["/bin/bash"]
