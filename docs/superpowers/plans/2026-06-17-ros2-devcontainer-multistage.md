@@ -98,7 +98,9 @@ Expected: `OK package moved`, `OK ros2_ws gone`, `OK gitignore`.
 - [ ] **Step 5: Commit**
 
 ```bash
-git add -A
+# Step 2's `git mv`/`git rm` already staged the move + deletions; this adds the new .gitignore.
+# Use explicit paths (NOT `git add -A`) so unrelated working-tree changes are not swept in.
+git add .gitignore src
 git commit -m "refactor: flatten colcon workspace to repo root (src/) + gitignore artifacts" \
            -m "Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>"
 ```
@@ -592,9 +594,9 @@ Not scriptable — perform in VS Code:
 
 Run:
 ```bash
-git status --short
+git status --short --untracked-files=no
 ```
-Expected: empty (all changes committed across Tasks 1–6).
+Expected: empty (all tracked changes committed across Tasks 1–6; an unrelated untracked `.canvas/` may remain and is fine).
 
 ---
 
