@@ -280,7 +280,7 @@ The file currently has interim edits. Replace its entire contents with:
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
         "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "sudo rosdep update && sudo rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
+    "postCreateCommand": "rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
 }
 ```
 
