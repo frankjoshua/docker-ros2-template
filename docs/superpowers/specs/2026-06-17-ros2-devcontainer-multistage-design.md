@@ -144,7 +144,7 @@ Keep the current guide-derived file; change only the build block and remote user
         "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached",
         "source=/dev/dri,target=/dev/dri,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "rosdep update && rosdep install --from-paths src --ignore-src -y && sudo chown -R $(whoami) /home/ws/"
+    "postCreateCommand": "rosdep update && rosdep install --from-paths src --ignore-src -y"
 }
 ```
 
@@ -153,7 +153,9 @@ Keep the current guide-derived file; change only the build block and remote user
 - `remoteUser` and the `USERNAME` build arg are `ros` — a generic name, not a hardcoded personal
   username (this is a template). VS Code's `updateRemoteUserUID` (default on, Linux) remaps the `ros`
   UID to the host user, so bind-mounted files are not left root-owned.
-- `postCreateCommand` keeps the guide's intent (`rosdep` against `src/`, then chown the workspace).
+- `postCreateCommand` runs `rosdep` against `src/` (no `sudo`: cache lands in the user's `~/.ros`,
+  and `rosdep install` self-sudos `apt`). No `chown` needed — VS Code's `updateRemoteUserUID` maps
+  `ubuntu` to the host UID, so the bind-mounted workspace is already owned correctly.
 
 ### 3. `ros_entrypoint.sh`
 
