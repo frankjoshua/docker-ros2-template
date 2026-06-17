@@ -241,5 +241,5 @@ runs the example workspace).
 | Base image | `frankjoshua/ros2:lyrical` (kept) | User standardizes on it everywhere. |
 | One vs two Dockerfiles | **One**, multi-stage | Two files let dev/deploy deps diverge — breaks parity. |
 | Multi-stage vs push deps into base image | Multi-stage in this repo | Keeps project-specific deps with the project, not in the global base. |
-| Dev user | non-root `ros` | Avoids root-owned files in the bind-mounted workspace; UID auto-remapped by VS Code. Only an identity/entrypoint difference from prod — no dependency impact. |
+| Dev user | base image's default non-root `ubuntu` (UID 1000) | Simpler than creating a user (no userdel/useradd), and `ubuntu` already has the dialout/video/plugdev groups handy for robotics hardware. UID auto-remapped by VS Code so bind-mounted files aren't root-owned. Only an identity/entrypoint difference from prod — no dependency impact. (Switched from a created `ros` user post-review.) |
 | Workspace layout | flatten to `src/` at root | Required by the guide's dev-container layout; simplifies the deploy `COPY`. |

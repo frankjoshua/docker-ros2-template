@@ -16,7 +16,7 @@ These apply to every task. Exact values, copied from the spec:
 
 - **Base image:** `frankjoshua/ros2:lyrical` for every stage's lineage. Do **not** switch to official `ros:lyrical`.
 - **One Dockerfile** at the repo root, multi-stage. Shared dependencies go **only** in the `base` stage — never add a dependency to just `dev` or just `prod`.
-- **Dev user:** `ros`, `USER_UID=1000`, `USER_GID=1000`, passwordless sudo.
+- **Dev user:** the base image's default `ubuntu` (UID 1000), with passwordless sudo added. (Switched from a created `ros` user post-review — simpler, and `ubuntu` is already in the dialout/video/plugdev groups handy for robotics hardware.)
 - **Workspace layout:** repo root is the colcon workspace; packages live in `src/`. Dev container `workspaceFolder` is `/home/ws`.
 - **Deploy image:** `WORKDIR /ros2_ws`; entrypoint sources `/ros2_ws/install/setup.bash`.
 - **Published image name:** `frankjoshua/ros2-template`.

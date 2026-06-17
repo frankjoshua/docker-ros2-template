@@ -10,7 +10,7 @@ One `Dockerfile`, three stages, all `FROM frankjoshua/ros2:lyrical`:
 
 - **`base`** — shared dependencies. Add every extra apt/pip package here so dev and deploy can't
   drift apart.
-- **`dev`** — `base` + a non-root `ros` user + an interactive shell. This is what VS Code opens. Your
+- **`dev`** — `base` + the image's non-root `ubuntu` user (with passwordless sudo) + an interactive shell. This is what VS Code opens. Your
   workspace is bind-mounted (not copied) and you build it inside the container.
 - **`prod`** — `base` + your `src/` copied in and `colcon build`-ed, with an entrypoint that runs the
   example node. This is what `build.sh` / CI publish.
