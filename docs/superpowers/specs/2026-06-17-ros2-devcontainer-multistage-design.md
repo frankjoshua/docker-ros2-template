@@ -136,7 +136,7 @@ Keep the current guide-derived file; change only the build block and remote user
     "customizations": { "vscode": { "extensions": [ /* unchanged */ ] } },
     "containerEnv": {
         "DISPLAY": "unix:0",
-        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "SUBNET",
         "ROS_DOMAIN_ID": "42"
     },
     "runArgs": ["--net=host", "--pid=host", "--ipc=host", "-e", "DISPLAY=${env:DISPLAY}"],

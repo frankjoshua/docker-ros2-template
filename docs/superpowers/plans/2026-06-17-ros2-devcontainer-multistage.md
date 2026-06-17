@@ -267,7 +267,7 @@ The file currently has interim edits. Replace its entire contents with:
     },
     "containerEnv": {
         "DISPLAY": "unix:0",
-        "ROS_AUTOMATIC_DISCOVERY_RANGE": "LOCALHOST",
+        "ROS_AUTOMATIC_DISCOVERY_RANGE": "SUBNET",
         "ROS_DOMAIN_ID": "42"
     },
     "runArgs": [
