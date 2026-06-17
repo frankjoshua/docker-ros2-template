@@ -1,2 +1,0 @@
-[console_scripts]
-example_node = example_pkg.example_node:main
