@@ -3,9 +3,17 @@ name: CI
 on:
   workflow_dispatch:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
   push:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - 'LICENSE'
   schedule:
     # Run once a month
     - cron: '1 2 3 * *'
