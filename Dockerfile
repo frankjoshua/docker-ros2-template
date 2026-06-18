@@ -3,7 +3,7 @@ FROM frankjoshua/ros2:lyrical AS base
 # so they cannot drift apart. Any dependency NOT declared in a src/*/package.xml must be added
 # here — never installed ad hoc inside a running dev container (that change would not reach prod).
 RUN apt-get update && apt-get install -y \
-        python3-pip \
+        python3-pip wget\
     && rm -rf /var/lib/apt/lists/*
 
 # ---- dev: what VS Code opens. Reuse the image's default non-root user (uid 1000, "ubuntu"),
