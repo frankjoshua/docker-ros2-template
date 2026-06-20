@@ -7,15 +7,19 @@ if [[ $? -ne 0 ]]; then
     exit 1
 fi
 ARCHITECTURE="--platform linux/arm64,linux/amd64"
-usage() { 
-    echo "Usage: $0 -t <DOCKER_TAG> [-a <ARCHITECTURE>] [-p Push] [-l Local build]"
+usage() {
+    echo "Usage: $0 -t <DOCKER_TAG> [-a <ARCHITECTURE>] [-b <BASE_IMAGE>] [-p Push] [-l Local build]"
     echo "Default architecture: linux/arm64,linux/amd64"
-    exit 1 
+    echo "Default base image:   Dockerfile BASE_IMAGE arg (e.g. -b frankjoshua/ros2:humble)"
+    exit 1
 }
-while getopts ":a:t:pql" o; do
+while getopts ":a:b:t:pql" o; do
     case "${o}" in
         t)
             TAG="${OPTARG}"
+            ;;
+        b)
+            BASE_IMAGE="--build-arg BASE_IMAGE=${OPTARG}"
             ;;
         p)
             PUSH="--push"
@@ -57,7 +61,7 @@ if [[ -z "${LOCAL}" ]]; then
   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes --credential yes
 fi
 # Build container on all achitectures in parallel and push to Docker Hub
-eval "docker buildx build $PUSH -t $TAG $ARCHITECTURE --target prod . $QUIET"
+eval "docker buildx build $PUSH -t $TAG $ARCHITECTURE $BASE_IMAGE --target prod . $QUIET"
 # Clean up and return error code for CI system if needed
 ERROR_CODE=$?
 if [[ -z "${LOCAL}" ]]; then

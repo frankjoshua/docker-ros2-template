@@ -11,7 +11,7 @@
     },
     // Autocomplete from ros python packages
     "python.autoComplete.extraPaths": [
-        "/opt/ros/foxy/lib/python3.8/site-packages/"
+        "/opt/ros/*/lib/python3*/site-packages/"
     ],
     // Environment file lets vscode find python files within workspace
     "python.envFile": "${workspaceFolder}/.env",
@@ -23,7 +23,10 @@
     "C_Cpp.default.intelliSenseMode": "clang-x64",
     "C_Cpp.formatting": "Disabled",
     "uncrustify.useReplaceOption": true,
-    "uncrustify.configPath.linux": "/opt/ros/foxy/lib/python3.8/site-packages/ament_uncrustify/configuration/ament_code_style.cfg",
+    // ament's C++ style config ships inside the ROS install. The Uncrustify extension does not expand
+    // globs here, so if you target a distro other than the default, set the exact path for it (the
+    // python3.X segment tracks the distro: foxy=3.8, humble=3.10, jazzy=3.12, etc.).
+    "uncrustify.configPath.linux": "/opt/ros/${env:ROS_DISTRO}/lib/python3*/site-packages/ament_uncrustify/configuration/ament_code_style.cfg",
     "[cpp]": {
         "editor.defaultFormatter": "zachflower.uncrustify"
     },
@@ -56,7 +59,7 @@
         "**/log": true
     },
     "python.analysis.extraPaths": [
-        "/opt/ros/foxy/lib/python3.8/site-packages/"
+        "/opt/ros/*/lib/python3*/site-packages/"
     ],
     "cSpell.allowCompoundWords": true,
     "cSpell.ignorePaths": [

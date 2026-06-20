@@ -6,7 +6,10 @@ container to work in and a multi-architecture image to ship — both built from 
 
 ## How it works
 
-One `Dockerfile`, three stages, all `FROM frankjoshua/ros2:lyrical`:
+One `Dockerfile`, three stages, all built from the same base image. The distro is set in one place —
+the `BASE_IMAGE` arg at the top of the [Dockerfile](Dockerfile) (`frankjoshua/ros2:lyrical` by
+default). Change that line to target any ROS 2 version; the dev container and `build.sh` both
+inherit it, and everything else keys off `$ROS_DISTRO` (set by the base image). The stages:
 
 - **`base`** — shared dependencies. Add every extra apt/pip package here so dev and deploy can't
   drift apart.

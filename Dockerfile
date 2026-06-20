@@ -1,4 +1,8 @@
-FROM frankjoshua/ros2:lyrical AS base
+# The base image pins the ROS 2 distro. Override it to target a different version, e.g.
+#   docker build --build-arg BASE_IMAGE=frankjoshua/ros2:humble ...
+# Everything below references $ROS_DISTRO (set by the base image), so nothing else needs editing.
+ARG BASE_IMAGE=frankjoshua/ros2:jazzy
+FROM ${BASE_IMAGE} AS base
 # Single source of truth for shared dependencies. Both `dev` and `prod` inherit this stage,
 # so they cannot drift apart. Any dependency NOT declared in a src/*/package.xml must be added
 # here — never installed ad hoc inside a running dev container (that change would not reach prod).
